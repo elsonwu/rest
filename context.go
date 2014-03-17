@@ -41,6 +41,7 @@ func (self *Context) Req() *http.Request {
 }
 
 func (self *Context) JsonDecode(out interface{}) error {
+	defer self.req.Body.Close()
 	return json.NewDecoder(self.req.Body).Decode(out)
 }
 
