@@ -3,7 +3,6 @@ package rest
 import (
 	"io"
 	"labix.org/v2/mgo/bson"
-	"strconv"
 )
 
 type Data interface{}
@@ -17,10 +16,16 @@ func NewErrs() *Errs {
 	return &Errs{}
 }
 
-type Errs map[string]errItem
+type Errs []errItem
 
 func (self *Errs) AddErr(num int, msg string) *Errs {
-	(*self)[strconv.Itoa(num)] = errItem{num, msg}
+	for _, e := range *self {
+		if e.Num == num {
+			return self
+		}
+	}
+
+	(*self) = append(*self, errItem{num, msg})
 	return self
 }
 
