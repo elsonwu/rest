@@ -9,6 +9,13 @@ import (
 func NewContext() *Context {
 	c := new(Context)
 	c.params = url.Values{}
+
+	// Default "Decode" method
+	c.Decode = func(out interface{}) error {
+		defer c.req.Body.Close()
+		return json.NewDecoder(c.req.Body).Decode(out)
+	}
+
 	return c
 }
 
@@ -18,6 +25,7 @@ type Context struct {
 	user                  User
 	runParseMultipartForm bool
 	AutoSetUser           func()
+	Decode                func(out interface{}) error
 }
 
 func (self *Context) User() User {
@@ -38,11 +46,6 @@ func (self *Context) SetReq(req *http.Request) {
 
 func (self *Context) Req() *http.Request {
 	return self.req
-}
-
-func (self *Context) JsonDecode(out interface{}) error {
-	defer self.req.Body.Close()
-	return json.NewDecoder(self.req.Body).Decode(out)
 }
 
 func (self *Context) initParams() {
