@@ -1,22 +1,15 @@
 package rest
 
-func DefaultAfter(ctx *Context, aw *ApiWrapper) {
-	aw.LoopWith(ctx)
-	ctx.Store().SetupIds(ctx)
-}
-
 func NewHandler() *Handler {
 	handler := new(Handler)
 	handler.apis = apis{}
-	handler.After = DefaultAfter
 	return handler
 }
 
 type apis map[string]IApiWrapper
 
 type Handler struct {
-	apis  apis
-	After func(*Context, *ApiWrapper)
+	apis apis
 }
 
 func (self *Handler) Add(name string, api *ApiWrapper) {

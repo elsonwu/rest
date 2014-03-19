@@ -19,7 +19,8 @@ func (self *ApiWrapper) LoopWith(ctx *Context) {
 }
 
 func (self *ApiWrapper) after(ctx *Context) {
-	ctx.Handler().After(ctx, self)
+	self.LoopWith(ctx)
+	ctx.Store().SetupIds(ctx)
 }
 
 func (self *ApiWrapper) Fill(ctx *Context, id string) {
