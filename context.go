@@ -24,6 +24,8 @@ type Context struct {
 	params                url.Values
 	user                  User
 	runParseMultipartForm bool
+	store                 *store
+	handler               *Handler
 	AutoSetUser           func()
 	Decode                func(out interface{}) error
 }
@@ -36,8 +38,24 @@ func (self *Context) User() User {
 	return self.user
 }
 
+func (self *Context) Handler() *Handler {
+	return self.handler
+}
+
+func (self *Context) SetHandler(handler *Handler) {
+	self.handler = handler
+}
+
 func (self *Context) SetUser(user User) {
 	self.user = user
+}
+
+func (self *Context) Store() *store {
+	if self.store == nil {
+		self.store = newStore()
+	}
+
+	return self.store
 }
 
 func (self *Context) SetReq(req *http.Request) {

@@ -3,16 +3,18 @@ package rest
 func NewHandler() *Handler {
 	handler := new(Handler)
 	handler.apis = apis{}
+	handler.After = func(ctx *Context, aw *ApiWrapper) {}
 	return handler
 }
 
 type apis map[string]IApiWrapper
 
 type Handler struct {
-	apis apis
+	apis  apis
+	After func(*Context, *ApiWrapper)
 }
 
-func (self *Handler) Add(name string, api IApiWrapper) {
+func (self *Handler) Add(name string, api *ApiWrapper) {
 	if self.Has(name) {
 		panic("Api " + name + " already exists")
 	}
@@ -31,9 +33,9 @@ func (self *Handler) Has(apiName string) bool {
 }
 
 func (self *Handler) Get(apiName string) IApiWrapper {
-	for name, apiWrapper := range self.apis {
+	for name, ApiWrapper := range self.apis {
 		if name == apiName {
-			return apiWrapper
+			return ApiWrapper
 		}
 	}
 
