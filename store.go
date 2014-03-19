@@ -1,9 +1,5 @@
 package rest
 
-import (
-	"fmt"
-)
-
 func newStore() *store {
 	s := new(store)
 	s.datas = map[string][]interface{}{}
@@ -61,9 +57,11 @@ func (self *store) SetupIds(ctx *Context) {
 
 		api := ctx.Handler().Get(apiName)
 		if api != nil {
-			api.SetupItems(ctx, ids)
+			for _, id := range ids {
+				api.Fill(ctx, id)
+			}
+
 			self.Empty(apiName)
-			fmt.Println(self.ids)
 			self.SetupIds(ctx)
 		}
 	}

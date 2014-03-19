@@ -1,8 +1,9 @@
 package rest
 
 type IApi interface {
-	With(ctx *Context)
-	SetupItems(ctx *Context, ids []string)
+	DataName() string
+	With(ctx *Context, dataItem interface{})
+	Fill(ctx *Context, id string)
 	View(ctx *Context) *Errs
 	List(ctx *Context) *Errs
 	Create(ctx *Context) *Errs
@@ -11,8 +12,8 @@ type IApi interface {
 }
 
 type IApiWrapper interface {
-	With(ctx *Context)
-	SetupItems(ctx *Context, ids []string)
+	LoopWith(ctx *Context)
+	Fill(ctx *Context, id string)
 	View(ctx *Context) *Errs
 	List(ctx *Context) *Errs
 	Create(ctx *Context) *Errs

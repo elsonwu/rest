@@ -1,9 +1,14 @@
 package rest
 
+func DefaultAfter(ctx *Context, aw *ApiWrapper) {
+	aw.LoopWith(ctx)
+	ctx.Store().SetupIds(ctx)
+}
+
 func NewHandler() *Handler {
 	handler := new(Handler)
 	handler.apis = apis{}
-	handler.After = func(ctx *Context, aw *ApiWrapper) {}
+	handler.After = DefaultAfter
 	return handler
 }
 

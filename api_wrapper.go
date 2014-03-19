@@ -12,17 +12,19 @@ type ApiWrapper struct {
 	api IApi
 }
 
-func (self *ApiWrapper) With(ctx *Context) {
-	self.api.With(ctx)
+func (self *ApiWrapper) LoopWith(ctx *Context) {
+	for _, dataItem := range ctx.Store().All(self.api.DataName()) {
+		self.api.With(ctx, dataItem)
+	}
 }
 
 func (self *ApiWrapper) after(ctx *Context) {
 	ctx.Handler().After(ctx, self)
 }
 
-func (self *ApiWrapper) SetupItems(ctx *Context, ids []string) {
-	self.api.SetupItems(ctx, ids)
-	self.With(ctx)
+func (self *ApiWrapper) Fill(ctx *Context, id string) {
+	self.api.Fill(ctx, id)
+	self.LoopWith(ctx)
 }
 
 func (self *ApiWrapper) View(ctx *Context) *Errs {
