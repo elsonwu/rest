@@ -13,14 +13,14 @@ type ApiWrapper struct {
 }
 
 func (self *ApiWrapper) LoopWith(ctx *Context) {
-	for _, dataItem := range ctx.Store().All(self.api.DataName()) {
+	for _, dataItem := range ctx.Store().all(self.api.DataName()) {
 		self.api.With(ctx, dataItem)
 	}
 }
 
 func (self *ApiWrapper) after(ctx *Context) {
 	self.LoopWith(ctx)
-	ctx.Store().SetupIds(ctx)
+	ctx.Store().fillByIds(ctx)
 }
 
 func (self *ApiWrapper) Fill(ctx *Context, id string) {
