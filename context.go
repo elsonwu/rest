@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 func NewContext() *Context {
 	c := new(Context)
-	c.params = url.Values{}
+	c.params = &urlValues{&url.Values{}}
 
 	// Default "Decode" method
 	c.Decode = func(out interface{}) error {
@@ -19,9 +20,19 @@ func NewContext() *Context {
 	return c
 }
 
+type urlValues struct {
+	*url.Values
+}
+
+func (self *urlValues) Int(key string) int {
+	self.Get(key)
+	i, _ := strconv.Atoi(key)
+	return i
+}
+
 type Context struct {
 	req                   *http.Request
-	params                url.Values
+	params                *urlValues
 	user                  User
 	runParseMultipartForm bool
 	store                 *store
@@ -73,11 +84,11 @@ func (self *Context) initParams() {
 
 	// 32m
 	self.req.ParseMultipartForm(32 << 20)
-	self.params = self.req.Form
+	self.params = &urlValues{&self.req.Form}
 	self.runParseMultipartForm = true
 }
 
-func (self *Context) Params() url.Values {
+func (self *Context) Params() *urlValues {
 	self.initParams()
 	return self.params
 }
