@@ -25,8 +25,7 @@ type urlValues struct {
 }
 
 func (self *urlValues) Int(key string) int {
-	self.Get(key)
-	i, _ := strconv.Atoi(key)
+	i, _ := strconv.Atoi(self.Get(key))
 	return i
 }
 
