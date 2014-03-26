@@ -4,6 +4,7 @@ type Api struct {
 	name string
 }
 
+func (self *Api) Init()                                   {}
 func (self *Api) With(ctx *Context, dataItem interface{}) {}
 func (self *Api) Fill(ctx *Context, id string)            {}
 func (self *Api) View(ctx *Context) *Errs                 { return nil }

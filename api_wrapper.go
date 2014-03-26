@@ -12,6 +12,10 @@ type ApiWrapper struct {
 	api IApi
 }
 
+func (self *ApiWrapper) Init() {
+	self.api.Init()
+}
+
 func (self *ApiWrapper) LoopWith(ctx *Context) {
 	for _, dataItem := range ctx.Store().all(self.api.DataName()) {
 		self.api.With(ctx, dataItem)

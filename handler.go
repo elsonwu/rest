@@ -17,6 +17,7 @@ func (self *Handler) Add(name string, api *ApiWrapper) {
 		panic("Api " + name + " already exists")
 	}
 
+	api.Init()
 	self.apis[name] = api
 }
 

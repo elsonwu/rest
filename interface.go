@@ -1,6 +1,7 @@
 package rest
 
 type IApi interface {
+	Init()
 	DataName() string
 	With(ctx *Context, dataItem interface{})
 	Fill(ctx *Context, id string)
@@ -12,6 +13,7 @@ type IApi interface {
 }
 
 type IApiWrapper interface {
+	Init()
 	LoopWith(ctx *Context)
 	Fill(ctx *Context, id string)
 	View(ctx *Context) *Errs
