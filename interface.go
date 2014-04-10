@@ -10,6 +10,8 @@ type IApi interface {
 	Create(ctx *Context) *Errs
 	Update(ctx *Context) *Errs
 	Delete(ctx *Context) *Errs
+	UpdateAll(ctx *Context) *Errs
+	DeleteAll(ctx *Context) *Errs
 }
 
 type IApiWrapper interface {
@@ -21,4 +23,6 @@ type IApiWrapper interface {
 	Create(ctx *Context) *Errs
 	Update(ctx *Context) *Errs
 	Delete(ctx *Context) *Errs
+	UpdateAll(ctx *Context) *Errs
+	DeleteAll(ctx *Context) *Errs
 }

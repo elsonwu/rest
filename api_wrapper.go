@@ -61,3 +61,15 @@ func (self *ApiWrapper) Delete(ctx *Context) *Errs {
 	self.after(ctx)
 	return es
 }
+
+func (self *ApiWrapper) UpdateAll(ctx *Context) *Errs {
+	es := self.api.UpdateAll(ctx)
+	self.after(ctx)
+	return es
+}
+
+func (self *ApiWrapper) DeleteAll(ctx *Context) *Errs {
+	es := self.api.DeleteAll(ctx)
+	self.after(ctx)
+	return es
+}
