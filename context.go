@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+	"net"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -29,8 +30,17 @@ func (self *urlValues) Int(key string) int {
 	return i
 }
 
+type Request struct {
+	*http.Request
+}
+
+func (self *Request) Ip() string {
+	ip, _, _ := net.SplitHostPort(self.RemoteAddr)
+	return ip
+}
+
 type Context struct {
-	req                   *http.Request
+	req                   *Request
 	params                *urlValues
 	user                  User
 	runParseMultipartForm bool
@@ -69,10 +79,12 @@ func (self *Context) Store() *store {
 }
 
 func (self *Context) SetReq(req *http.Request) {
-	self.req = req
+	self.req = &Request{
+		Request: req,
+	}
 }
 
-func (self *Context) Req() *http.Request {
+func (self *Context) Req() *Request {
 	return self.req
 }
 
