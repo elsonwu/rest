@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -14,8 +15,16 @@ func NewContext() *Context {
 
 	// Default "Decode" method
 	c.Decode = func(out interface{}) error {
-		defer c.req.Body.Close()
-		return json.NewDecoder(c.req.Body).Decode(out)
+		if c.reqBody == nil {
+			defer c.req.Body.Close()
+			v, err := ioutil.ReadAll(c.req.Body)
+			c.reqBody = v
+			if err != nil {
+				return err
+			}
+		}
+
+		return json.Unmarshal(c.reqBody, out)
 	}
 
 	return c
@@ -41,6 +50,7 @@ func (self *Request) Ip() string {
 
 type Context struct {
 	req                   *Request
+	reqBody               []byte
 	params                *urlValues
 	user                  User
 	runParseMultipartForm bool
