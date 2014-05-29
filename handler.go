@@ -1,8 +1,6 @@
 package rest
 
-import (
-	"reflect"
-)
+import "reflect"
 
 func NewHandler() *Handler {
 	handler := new(Handler)
@@ -10,7 +8,20 @@ func NewHandler() *Handler {
 	return handler
 }
 
-type apis map[string]IApiWrapper
+type apis map[string]*apiItem
+
+type apiItem struct {
+	apiType reflect.Type
+	api     IApiWrapper
+}
+
+func (self *apiItem) Type() reflect.Type {
+	if self.apiType == nil {
+		self.apiType = reflect.TypeOf(self.api.Api())
+	}
+
+	return self.apiType
+}
 
 type Handler struct {
 	apis apis
@@ -18,9 +29,9 @@ type Handler struct {
 
 func (self *Handler) Api(val interface{}) IApiWrapper {
 	typ := reflect.TypeOf(val)
-	for _, apiw := range self.apis {
-		if reflect.TypeOf(apiw.Api()) == typ {
-			return apiw
+	for _, a := range self.apis {
+		if a.Type() == typ {
+			return a.api
 		}
 	}
 
@@ -33,7 +44,9 @@ func (self *Handler) Add(name string, api *ApiWrapper) {
 	}
 
 	api.Init()
-	self.apis[name] = api
+	self.apis[name] = &apiItem{
+		api: api,
+	}
 }
 
 func (self *Handler) Has(apiName string) bool {
@@ -47,9 +60,9 @@ func (self *Handler) Has(apiName string) bool {
 }
 
 func (self *Handler) Get(apiName string) IApiWrapper {
-	for name, ApiWrapper := range self.apis {
+	for name, a := range self.apis {
 		if name == apiName {
-			return ApiWrapper
+			return a.api
 		}
 	}
 
