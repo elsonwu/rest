@@ -12,7 +12,7 @@ type store struct {
 	idsMap  map[string]map[string]bool
 }
 
-func (self *store) Add(name string, id string) {
+func (self *store) AddId(name string, id string) {
 	if nil == self.idsMap[name] {
 		self.idsMap[name] = map[string]bool{}
 	}
@@ -24,7 +24,7 @@ func (self *store) empty(name string) {
 	delete(self.idsMap, name)
 }
 
-func (self *store) Append(name string, data interface{}) {
+func (self *store) AddRecord(name string, data interface{}) {
 	self.dataMap[name] = append(self.dataMap[name], data)
 }
 
