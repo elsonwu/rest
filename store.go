@@ -3,25 +3,21 @@ package rest
 func newStore() *store {
 	s := new(store)
 	s.dataMap = map[string][]interface{}{}
-	s.idsMap = map[string][]string{}
+	s.idsMap = map[string]map[string]bool{}
 	return s
 }
 
 type store struct {
 	dataMap map[string][]interface{}
-	idsMap  map[string][]string
+	idsMap  map[string]map[string]bool
 }
 
 func (self *store) Add(name string, id string) {
-	if idsMap, ok := self.idsMap[name]; ok {
-		for _, _id := range idsMap {
-			if _id == id {
-				return
-			}
-		}
+	if nil == self.idsMap[name] {
+		self.idsMap[name] = map[string]bool{}
 	}
 
-	self.idsMap[name] = append(self.idsMap[name], id)
+	self.idsMap[name][id] = true
 }
 
 func (self *store) empty(name string) {
@@ -58,10 +54,10 @@ func (self *store) fillByIds(ctx *Context) {
 
 		api := ctx.Handler().Get(apiName)
 		if api == nil {
-			return
+			continue
 		}
 
-		for _, id := range idsMap {
+		for id, _ := range idsMap {
 			api.Fill(ctx, id)
 		}
 
