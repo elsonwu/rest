@@ -16,9 +16,13 @@ func (self *ApiWrapper) Init() {
 	self.api.Init()
 }
 
+func (self *ApiWrapper) Api() IApi {
+	return self.api
+}
+
 func (self *ApiWrapper) LoopWith(ctx *Context) {
 	for _, dataItem := range ctx.Store().all(self.api.DataName()) {
-		self.api.With(ctx, dataItem)
+		self.With(ctx, dataItem)
 	}
 }
 
@@ -30,6 +34,10 @@ func (self *ApiWrapper) after(ctx *Context) {
 func (self *ApiWrapper) Fill(ctx *Context, id string) {
 	self.api.Fill(ctx, id)
 	self.LoopWith(ctx)
+}
+
+func (self *ApiWrapper) With(ctx *Context, dataItem interface{}) {
+	self.api.With(ctx, dataItem)
 }
 
 func (self *ApiWrapper) View(ctx *Context) *Errs {

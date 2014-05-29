@@ -16,7 +16,9 @@ type IApi interface {
 
 type IApiWrapper interface {
 	Init()
+	Api() IApi
 	LoopWith(ctx *Context)
+	With(ctx *Context, dataItem interface{})
 	Fill(ctx *Context, id string)
 	View(ctx *Context) *Errs
 	List(ctx *Context) *Errs

@@ -1,5 +1,9 @@
 package rest
 
+import (
+	"reflect"
+)
+
 func NewHandler() *Handler {
 	handler := new(Handler)
 	handler.apis = apis{}
@@ -10,6 +14,17 @@ type apis map[string]IApiWrapper
 
 type Handler struct {
 	apis apis
+}
+
+func (self *Handler) Api(val interface{}) IApiWrapper {
+	typ := reflect.TypeOf(val)
+	for _, apiw := range self.apis {
+		if reflect.TypeOf(apiw.Api()) == typ {
+			return apiw
+		}
+	}
+
+	return nil
 }
 
 func (self *Handler) Add(name string, api *ApiWrapper) {
