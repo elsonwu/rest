@@ -39,6 +39,11 @@ func (self *urlValues) Int(key string) int {
 	return i
 }
 
+func (self *urlValues) Bool(key string) bool {
+	v := self.Get(key)
+	return v == "true" || v == "1"
+}
+
 type Request struct {
 	*http.Request
 }

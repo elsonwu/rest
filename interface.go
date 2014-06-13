@@ -5,13 +5,13 @@ type IApi interface {
 	DataName() string
 	With(ctx *Context, dataItem interface{})
 	Fill(ctx *Context, id string)
-	View(ctx *Context) *Errs
-	List(ctx *Context) *Errs
-	Create(ctx *Context) *Errs
-	Update(ctx *Context) *Errs
-	Delete(ctx *Context) *Errs
-	UpdateAll(ctx *Context) *Errs
-	DeleteAll(ctx *Context) *Errs
+	View(ctx *Context) []error
+	List(ctx *Context) []error
+	Create(ctx *Context) []error
+	Update(ctx *Context) []error
+	Delete(ctx *Context) []error
+	UpdateAll(ctx *Context) []error
+	DeleteAll(ctx *Context) []error
 }
 
 type IApiWrapper interface {
@@ -20,11 +20,11 @@ type IApiWrapper interface {
 	LoopWith(ctx *Context)
 	With(ctx *Context, dataItem interface{})
 	Fill(ctx *Context, id string)
-	View(ctx *Context) *Errs
-	List(ctx *Context) *Errs
-	Create(ctx *Context) *Errs
-	Update(ctx *Context) *Errs
-	Delete(ctx *Context) *Errs
-	UpdateAll(ctx *Context) *Errs
-	DeleteAll(ctx *Context) *Errs
+	View(ctx *Context) []error
+	List(ctx *Context) []error
+	Create(ctx *Context) []error
+	Update(ctx *Context) []error
+	Delete(ctx *Context) []error
+	UpdateAll(ctx *Context) []error
+	DeleteAll(ctx *Context) []error
 }

@@ -40,43 +40,43 @@ func (self *ApiWrapper) With(ctx *Context, dataItem interface{}) {
 	self.api.With(ctx, dataItem)
 }
 
-func (self *ApiWrapper) View(ctx *Context) *Errs {
+func (self *ApiWrapper) View(ctx *Context) []error {
 	es := self.api.View(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) List(ctx *Context) *Errs {
+func (self *ApiWrapper) List(ctx *Context) []error {
 	es := self.api.List(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) Create(ctx *Context) *Errs {
+func (self *ApiWrapper) Create(ctx *Context) []error {
 	es := self.api.Create(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) Update(ctx *Context) *Errs {
+func (self *ApiWrapper) Update(ctx *Context) []error {
 	es := self.api.Update(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) Delete(ctx *Context) *Errs {
+func (self *ApiWrapper) Delete(ctx *Context) []error {
 	es := self.api.Delete(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) UpdateAll(ctx *Context) *Errs {
+func (self *ApiWrapper) UpdateAll(ctx *Context) []error {
 	es := self.api.UpdateAll(ctx)
 	self.after(ctx)
 	return es
 }
 
-func (self *ApiWrapper) DeleteAll(ctx *Context) *Errs {
+func (self *ApiWrapper) DeleteAll(ctx *Context) []error {
 	es := self.api.DeleteAll(ctx)
 	self.after(ctx)
 	return es
