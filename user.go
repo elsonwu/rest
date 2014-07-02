@@ -1,5 +1,13 @@
 package rest
 
 type User struct {
-	Id string
+	id string
+}
+
+func (self *User) Id() string {
+	return self.id
+}
+
+func (self *User) SetId(id string) {
+	self.id = id
 }

@@ -1,5 +1,7 @@
 package rest
 
+import "net/http"
+
 type IApi interface {
 	Init()
 	DataName() string
@@ -27,4 +29,23 @@ type IApiWrapper interface {
 	Delete(ctx IContext) []error
 	UpdateAll(ctx IContext) []error
 	DeleteAll(ctx IContext) []error
+}
+
+type IContext interface {
+	User() IUser
+	Handler() *Handler
+	SetHandler(h *Handler)
+	SetUser(u IUser)
+	SetAutoSetUserFunc(func())
+	Store() *store
+	SetReq(req *http.Request)
+	Req() *Request
+	Params() *urlValues
+	Decode(out interface{}) error
+	SetDecodeFunc(func(out interface{}) error)
+}
+
+type IUser interface {
+	Id() string
+	SetId(id string)
 }

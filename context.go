@@ -53,25 +53,11 @@ func (self *Request) Ip() string {
 	return ip
 }
 
-type IContext interface {
-	User() User
-	Handler() *Handler
-	SetHandler(h *Handler)
-	SetUser(u User)
-	SetAutoSetUserFunc(func())
-	Store() *store
-	SetReq(req *http.Request)
-	Req() *Request
-	Params() *urlValues
-	Decode(out interface{}) error
-	SetDecodeFunc(func(out interface{}) error)
-}
-
 type Context struct {
 	req                   *Request
 	reqBody               []byte
 	params                *urlValues
-	user                  User
+	user                  IUser
 	runParseMultipartForm bool
 	store                 *store
 	handler               *Handler
@@ -79,8 +65,8 @@ type Context struct {
 	decode                func(out interface{}) error
 }
 
-func (self *Context) User() User {
-	if self.user.Id == "" {
+func (self *Context) User() IUser {
+	if self.user == nil {
 		self.AutoSetUser()
 	}
 
@@ -107,8 +93,8 @@ func (self *Context) Decode(out interface{}) error {
 	return self.decode(out)
 }
 
-func (self *Context) SetUser(user User) {
-	self.user = user
+func (self *Context) SetUser(u IUser) {
+	self.user = u
 }
 
 func (self *Context) Store() *store {
