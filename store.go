@@ -40,7 +40,7 @@ func (self *store) DataMap() map[string][]interface{} {
 	return self.dataMap
 }
 
-func (self *store) fillByIds(ctx *Context) {
+func (self *store) fillByIds(ctx IContext) {
 	count := len(self.idsMap)
 	if 0 == count {
 		return

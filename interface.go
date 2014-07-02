@@ -3,28 +3,28 @@ package rest
 type IApi interface {
 	Init()
 	DataName() string
-	With(ctx *Context, dataItem interface{})
-	Fill(ctx *Context, id string)
-	View(ctx *Context) []error
-	List(ctx *Context) []error
-	Create(ctx *Context) []error
-	Update(ctx *Context) []error
-	Delete(ctx *Context) []error
-	UpdateAll(ctx *Context) []error
-	DeleteAll(ctx *Context) []error
+	With(ctx IContext, dataItem interface{})
+	Fill(ctx IContext, id string)
+	View(ctx IContext) []error
+	List(ctx IContext) []error
+	Create(ctx IContext) []error
+	Update(ctx IContext) []error
+	Delete(ctx IContext) []error
+	UpdateAll(ctx IContext) []error
+	DeleteAll(ctx IContext) []error
 }
 
 type IApiWrapper interface {
 	Init()
 	Api() IApi
-	LoopWith(ctx *Context)
-	With(ctx *Context, dataItem interface{})
-	Fill(ctx *Context, id string)
-	View(ctx *Context) []error
-	List(ctx *Context) []error
-	Create(ctx *Context) []error
-	Update(ctx *Context) []error
-	Delete(ctx *Context) []error
-	UpdateAll(ctx *Context) []error
-	DeleteAll(ctx *Context) []error
+	LoopWith(ctx IContext)
+	With(ctx IContext, dataItem interface{})
+	Fill(ctx IContext, id string)
+	View(ctx IContext) []error
+	List(ctx IContext) []error
+	Create(ctx IContext) []error
+	Update(ctx IContext) []error
+	Delete(ctx IContext) []error
+	UpdateAll(ctx IContext) []error
+	DeleteAll(ctx IContext) []error
 }

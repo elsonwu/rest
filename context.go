@@ -9,12 +9,12 @@ import (
 	"strconv"
 )
 
-func NewContext() *Context {
+func NewContext() IContext {
 	c := new(Context)
 	c.params = &urlValues{&url.Values{}}
 
-	// Default "Decode" method
-	c.Decode = func(out interface{}) error {
+	// Default "decode"
+	c.SetDecodeFunc(func(out interface{}) error {
 		if c.reqBody == nil {
 			defer c.req.Body.Close()
 			v, err := ioutil.ReadAll(c.req.Body)
@@ -25,7 +25,7 @@ func NewContext() *Context {
 		}
 
 		return json.Unmarshal(c.reqBody, out)
-	}
+	})
 
 	return c
 }
@@ -53,6 +53,20 @@ func (self *Request) Ip() string {
 	return ip
 }
 
+type IContext interface {
+	User() User
+	Handler() *Handler
+	SetHandler(h *Handler)
+	SetUser(u User)
+	SetAutoSetUserFunc(func())
+	Store() *store
+	SetReq(req *http.Request)
+	Req() *Request
+	Params() *urlValues
+	Decode(out interface{}) error
+	SetDecodeFunc(func(out interface{}) error)
+}
+
 type Context struct {
 	req                   *Request
 	reqBody               []byte
@@ -62,7 +76,7 @@ type Context struct {
 	store                 *store
 	handler               *Handler
 	AutoSetUser           func()
-	Decode                func(out interface{}) error
+	decode                func(out interface{}) error
 }
 
 func (self *Context) User() User {
@@ -73,12 +87,24 @@ func (self *Context) User() User {
 	return self.user
 }
 
+func (self *Context) SetAutoSetUserFunc(fn func()) {
+	self.AutoSetUser = fn
+}
+
 func (self *Context) Handler() *Handler {
 	return self.handler
 }
 
 func (self *Context) SetHandler(handler *Handler) {
 	self.handler = handler
+}
+
+func (self *Context) SetDecodeFunc(fn func(out interface{}) error) {
+	self.decode = fn
+}
+
+func (self *Context) Decode(out interface{}) error {
+	return self.decode(out)
 }
 
 func (self *Context) SetUser(user User) {
