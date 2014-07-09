@@ -68,6 +68,9 @@ type Context struct {
 func (self *Context) User() IUser {
 	if self.user == nil {
 		self.AutoSetUser()
+		if self.user == nil {
+			self.user = new(User)
+		}
 	}
 
 	return self.user
