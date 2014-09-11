@@ -4,12 +4,22 @@ func newStore() *store {
 	s := new(store)
 	s.dataMap = map[string][]interface{}{}
 	s.idsMap = map[string]map[string]bool{}
+	s.meta = map[string]interface{}{}
 	return s
 }
 
 type store struct {
 	dataMap map[string][]interface{}
 	idsMap  map[string]map[string]bool
+	meta    map[string]interface{}
+}
+
+func (self *store) Meta() map[string]interface{} {
+	return self.meta
+}
+
+func (self *store) AddMeta(name string, val interface{}) {
+	self.meta[name] = val
 }
 
 func (self *store) AddId(name string, id string) {
