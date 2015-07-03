@@ -1,16 +1,43 @@
 package rest
 
+// in order to store a sorted map,
+// we store all ids in map[string]*ids
+type ids struct {
+	arr []string
+	m   map[string]bool
+}
+
+func newIds() *ids {
+	return &ids{
+		arr: make([]string, 0, 20),
+		m:   make(map[string]bool),
+	}
+}
+
+func (i *ids) add(id string) {
+	if _, ok := i.m[id]; ok {
+		return
+	}
+
+	i.m[id] = true
+	i.arr = append(i.arr, id)
+}
+
+func (i *ids) isEmpty() bool {
+	return len(i.m) == 0
+}
+
 func newStore() *store {
 	s := new(store)
 	s.dataMap = map[string][]interface{}{}
-	s.idsMap = map[string]map[string]bool{}
+	s.idsMap = map[string]*ids{}
 	s.meta = map[string]interface{}{}
 	return s
 }
 
 type store struct {
 	dataMap map[string][]interface{}
-	idsMap  map[string]map[string]bool
+	idsMap  map[string]*ids
 	meta    map[string]interface{}
 }
 
@@ -24,10 +51,10 @@ func (self *store) AddMeta(name string, val interface{}) {
 
 func (self *store) AddId(name string, id string) {
 	if nil == self.idsMap[name] {
-		self.idsMap[name] = map[string]bool{}
+		self.idsMap[name] = newIds()
 	}
 
-	self.idsMap[name][id] = true
+	self.idsMap[name].add(id)
 }
 
 func (self *store) empty(name string) {
@@ -57,7 +84,7 @@ func (self *store) fillByIds(ctx IContext) {
 	}
 
 	for apiName, idsMap := range self.idsMap {
-		if 0 == count {
+		if 0 == count || idsMap.isEmpty() {
 			self.empty(apiName)
 			return
 		}
@@ -67,7 +94,7 @@ func (self *store) fillByIds(ctx IContext) {
 			continue
 		}
 
-		for id, _ := range idsMap {
+		for _, id := range idsMap.arr {
 			api.Fill(ctx, id)
 		}
 
