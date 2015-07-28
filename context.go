@@ -12,6 +12,7 @@ import (
 func NewContext() IContext {
 	c := new(Context)
 	c.params = &urlValues{&url.Values{}}
+	c.tempData = newTempData()
 
 	// Default "decode"
 	c.SetDecodeFunc(func(out interface{}) error {
@@ -63,6 +64,7 @@ type Context struct {
 	handler               *Handler
 	AutoSetUser           func()
 	decode                func(out interface{}) error
+	tempData              *tempData
 }
 
 func (self *Context) User() IUser {
@@ -132,4 +134,8 @@ func (self *Context) initParams() {
 func (self *Context) Params() *urlValues {
 	self.initParams()
 	return self.params
+}
+
+func (self *Context) TempData() *tempData {
+	return self.tempData
 }

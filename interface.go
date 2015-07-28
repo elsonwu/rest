@@ -41,6 +41,7 @@ type IContext interface {
 	SetReq(req *http.Request)
 	Req() *Request
 	Params() *urlValues
+	TempData() *tempData
 	Decode(out interface{}) error
 	SetDecodeFunc(func(out interface{}) error)
 }
