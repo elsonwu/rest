@@ -42,8 +42,6 @@ type IContext interface {
 	Req() *Request
 	Params() *urlValues
 	TempData() *tempData
-	Decode(out interface{}) error
-	SetDecodeFunc(func(out interface{}) error)
 }
 
 type IUser interface {

@@ -1,8 +1,6 @@
 package rest
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -13,21 +11,6 @@ func NewContext() IContext {
 	c := new(Context)
 	c.params = &urlValues{&url.Values{}}
 	c.tempData = newTempData()
-
-	// Default "decode"
-	c.SetDecodeFunc(func(out interface{}) error {
-		if c.reqBody == nil {
-			defer c.req.Body.Close()
-			v, err := ioutil.ReadAll(c.req.Body)
-			c.reqBody = v
-			if err != nil {
-				return err
-			}
-		}
-
-		return json.Unmarshal(c.reqBody, out)
-	})
-
 	return c
 }
 
@@ -63,7 +46,6 @@ type Context struct {
 	store                 *store
 	handler               *Handler
 	AutoSetUser           func()
-	decode                func(out interface{}) error
 	tempData              *tempData
 }
 
@@ -88,14 +70,6 @@ func (self *Context) Handler() *Handler {
 
 func (self *Context) SetHandler(handler *Handler) {
 	self.handler = handler
-}
-
-func (self *Context) SetDecodeFunc(fn func(out interface{}) error) {
-	self.decode = fn
-}
-
-func (self *Context) Decode(out interface{}) error {
-	return self.decode(out)
 }
 
 func (self *Context) SetUser(u IUser) {
