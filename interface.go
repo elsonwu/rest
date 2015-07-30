@@ -42,6 +42,8 @@ type IContext interface {
 	Req() *Request
 	Params() *urlValues
 	TempData() *tempData
+	AddErr(...error)
+	Errs() []error
 }
 
 type IUser interface {

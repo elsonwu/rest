@@ -47,6 +47,7 @@ type Context struct {
 	handler               *Handler
 	AutoSetUser           func()
 	tempData              *tempData
+	errs                  []error
 }
 
 func (self *Context) User() IUser {
@@ -58,6 +59,14 @@ func (self *Context) User() IUser {
 	}
 
 	return self.user
+}
+
+func (self *Context) AddErr(errs ...error) {
+	self.errs = append(self.errs, errs...)
+}
+
+func (self *Context) Errs() []error {
+	return self.errs
 }
 
 func (self *Context) SetAutoSetUserFunc(fn func()) {
